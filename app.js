@@ -122,13 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         transcriptArea.scrollTop = transcriptArea.scrollHeight;
 
-        // 言語判定と自動翻訳の実行（発話後1秒）
+        // 言語判定と自動翻訳の実行（デバウンス時間を 1000ms → 350ms に短縮）
         clearTimeout(translationDebounceTimer);
         translationDebounceTimer = setTimeout(() => {
             if (currentText.trim()) {
                 handleAutoDetectAndTranslate(currentText.trim());
             }
-        }, 1000);
+        }, 350); // ★ 0.35秒後に翻訳リクエストを実行して応答ラグを削減
     };
 
     recognition.onerror = (event) => {
@@ -234,7 +234,11 @@ document.addEventListener('DOMContentLoaded', () => {
         finalTranscript = transcriptArea.value;
         updateCounts();
         if (transcriptArea.value.trim()) {
-            handleAutoDetectAndTranslate(transcriptArea.value.trim());
+            // テキスト直接編集時のタイマーも350msに短縮
+            clearTimeout(translationDebounceTimer);
+            translationDebounceTimer = setTimeout(() => {
+                handleAutoDetectAndTranslate(transcriptArea.value.trim());
+            }, 350);
         }
     });
 
