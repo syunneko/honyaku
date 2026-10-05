@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リアルタイム音声認識 ＆ 自動言語判別翻訳 AI</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- ヘッダー -->
+        <header class="app-header">
+            <div class="logo">
+                <i data-lucide="sparkles" class="logo-icon"></i>
+                <h1>スマート音声認識 ＆ 自動切り替え翻訳 AI</h1>
+            </div>
+            <p class="subtitle">日本語でも英語でも話しかけるだけ！自動判別して相互翻訳します</p>
+        </header>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- コントロールエリア -->
+            <section class="controls-card">
+                <div class="auto-mode-badge">
+                    <i data-lucide="zap"></i>
+                    <span>日本語 ⇄ 英語 自動切り替えモード動作中</span>
+                </div>
+
+                <div class="mic-section">
+                    <div class="mic-button-wrapper">
+                        <div class="pulse-ring" id="pulseRing"></div>
+                        <button id="toggleMicBtn" class="mic-btn" aria-label="マイク切り替え">
+                            <i data-lucide="mic" id="micIcon"></i>
+                        </button>
+                    </div>
+
+                    <div class="status-badge" id="statusBadge">
+                        <span class="status-dot"></span>
+                        <span id="statusText">待機中（マイクボタンを押して喋ってください）</span>
+                    </div>
+
+                    <!-- 音声波形アニメーション -->
+                    <div class="wave-container hidden" id="waveContainer">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- テキスト対比表示（2列レイアウト） -->
+            <div class="translation-grid">
+                <!-- 左側：音声入力（自動検知言語） -->
+                <section class="text-card source-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span id="sourceFlag" class="flag-badge">🇯🇵/🇺🇸</span>
+                            <h2 id="sourceTitle">音声入力（自動判定）</h2>
+                        </div>
+                        <span id="charCount" class="char-count">0 文字</span>
+                    </div>
+
+                    <div class="textarea-wrapper">
+                        <textarea 
+                            id="transcriptArea" 
+                            placeholder="マイクを押して日本語または英語で喋ってください..."
+                            rows="10"
+                        ></textarea>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="copySourceBtn" class="btn btn-secondary">
+                            <i data-lucide="copy"></i> コピー
+                        </button>
+                        <button id="clearBtn" class="btn btn-danger">
+                            <i data-lucide="trash-2"></i> クリア
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 右側：自動翻訳結果 -->
+                <section class="text-card target-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <span id="targetFlag" class="flag-badge">🌐</span>
+                            <h2 id="targetTitle">翻訳結果</h2>
+                            <span id="translatingIndicator" class="translating-tag hidden">
+                                <i data-lucide="loader-2" class="spin-icon"></i> 翻訳中...
+                            </span>
+                        </div>
+                        <span id="translatedCharCount" class="char-count">0 文字</span>
+                    </div>
+
+                    <div class="textarea-wrapper">
+                        <textarea 
+                            id="translatedArea" 
+                            placeholder="自動判定された言語に合わせて翻訳が表示されます..."
+                            rows="10"
+                            readonly
+                        ></textarea>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="copyTranslatedBtn" class="btn btn-primary">
+                            <i data-lucide="copy"></i> 翻訳をコピー
+                        </button>
+                        <button id="downloadBtn" class="btn btn-secondary">
+                            <i data-lucide="download"></i> 保存 (.txt)
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- 通知トースト -->
+        <div id="toast" class="toast hidden"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
